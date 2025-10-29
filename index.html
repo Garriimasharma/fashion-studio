@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Studio - AI Virtual Styling</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="header-title">Fashion Studio</h1>
+                    <p class="header-subtitle">AI-Powered Virtual Styling</p>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="exportBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                Export Look
+            </button>
+        </div>
+    </header>
 
+    <!-- Main Content -->
+    <main class="container">
+        <div class="grid">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <!-- Product Uploader -->
+                <div class="card">
+                    <h3 class="card-title">Product Image URL</h3>
+                    
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="productUrl" 
+                            class="input" 
+                            placeholder="https://example.com/product.jpg"
+                        />
+                    </div>
+
+                    <button class="btn btn-primary btn-block" id="extractBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                        Extract Product
+                    </button>
+
+                    <p class="helper-text">Paste a direct image URL or product page link</p>
+
+                    <div class="form-group">
+                        <label class="label">Product Type</label>
+                        <select id="productType" class="select">
+                            <option value="top">Top / Shirt</option>
+                            <option value="bottom">Bottom / Pants</option>
+                            <option value="shoes">Shoes</option>
+                            <option value="accessory">Accessory</option>
+                        </select>
+                    </div>
+
+                    <div class="tip-box">
+                        <span>💡</span>
+                        <p>Tip: After adding products, drag them to position and use mouse wheel to resize</p>
+                    </div>
+                </div>
+
+                <!-- Product Library -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            </svg>
+                            <h3 class="card-title">Applied Products (<span id="productCount">0</span>)</h3>
+                        </div>
+                        <button class="btn btn-outline btn-sm" id="clearAllBtn" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Clear All
+                        </button>
+                    </div>
+                    
+                    <div id="productList" class="product-list">
+                        <p class="empty-state">No products added yet</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center - Model Viewer -->
+            <section class="main-content">
+                <div class="card">
+                    <div class="model-viewer" id="modelViewer">
+                        <img 
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 500'%3E%3Crect fill='%23e5e7eb' width='300' height='500'/%3E%3Cellipse cx='150' cy='80' rx='40' ry='50' fill='%23d1d5db'/%3E%3Crect x='110' y='130' width='80' height='150' rx='10' fill='%23d1d5db'/%3E%3Crect x='105' y='280' width='40' height='120' rx='5' fill='%23d1d5db'/%3E%3Crect x='155' y='280' width='40' height='120' rx='5' fill='%23d1d5db'/%3E%3C/svg%3E"
+                            alt="Model"
+                            class="model-image"
+                            id="modelImage"
+                        />
+                        <div id="productsContainer"></div>
+                        <p class="overlay-text" id="overlayText">Add products to your model</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Instructions -->
+        <div class="card instructions">
+            <h3 class="card-title">How to Use</h3>
+            <div class="instructions-grid">
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <p>Paste a product image URL and click "Extract" to load the product</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <p>Select the product type and the item will be added to your model</p>
+                </div>
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <p>Drag products to reposition them and use mouse wheel to resize</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
